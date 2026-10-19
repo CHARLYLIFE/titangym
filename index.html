@@ -1,61 +1,67 @@
-// --- RUTINAS Y EJERCICIOS EXTENDIDOS POR GRUPO MUSCULAR ---
+// --- RUTINAS Y EJERCICIOS AMPLIADOS POR GRUPO MUSCULAR ---
 const defaultRoutines = [
   {
     id: 'rut_pecho_triceps',
     nombre: 'Pecho & Tríceps (Empuje)',
     ejercicios: [
-      { id: 'ex_p1', nombre: 'Press de Banca Plano con Barra', grupo: 'Pecho', series: [{peso: 135, reps: 10, done: false}, {peso: 155, reps: 8, done: false}] },
-      { id: 'ex_p2', nombre: 'Press Inclinado con Mancuernas', grupo: 'Pecho', series: [{peso: 50, reps: 10, done: false}] },
-      { id: 'ex_p3', nombre: 'Aperturas / Cruce de Poleas', grupo: 'Pecho', series: [{peso: 30, reps: 12, done: false}] },
+      { id: 'ex_p1', nombre: 'Press de Banca Plano con Barra', grupo: 'Pecho', series: [{peso: 0, reps: 10, done: false}, {peso: 0, reps: 8, done: false}] },
+      { id: 'ex_p2', nombre: 'Press Inclinado con Mancuernas', grupo: 'Pecho', series: [{peso: 0, reps: 10, done: false}] },
+      { id: 'ex_p3', nombre: 'Aperturas / Cruce de Poleas', grupo: 'Pecho', series: [{peso: 0, reps: 12, done: false}] },
+      { id: 'ex_p4', nombre: 'Press Declinado', grupo: 'Pecho', series: [{peso: 0, reps: 10, done: false}] },
       { id: 'ex_t1', nombre: 'Fondos en Paralelas (Dips)', grupo: 'Tríceps', series: [{peso: 0, reps: 10, done: false}] },
-      { id: 'ex_t2', nombre: 'Extensiones de Tríceps en Polea Alta', grupo: 'Tríceps', series: [{peso: 45, reps: 12, done: false}] },
-      { id: 'ex_t3', nombre: 'Press Francés con Barra Z', grupo: 'Tríceps', series: [{peso: 40, reps: 10, done: false}] }
+      { id: 'ex_t2', nombre: 'Extensiones de Tríceps en Polea Alta', grupo: 'Tríceps', series: [{peso: 0, reps: 12, done: false}] },
+      { id: 'ex_t3', nombre: 'Press Francés con Barra Z', grupo: 'Tríceps', series: [{peso: 0, reps: 10, done: false}] },
+      { id: 'ex_t4', nombre: 'Patada de Tríceps con Mancuerna', grupo: 'Tríceps', series: [{peso: 0, reps: 12, done: false}] }
     ]
   },
   {
     id: 'rut_espalda_biceps',
     nombre: 'Espalda & Bíceps (Tracción)',
     ejercicios: [
-      { id: 'ex_e1', nombre: 'Jalón al Pecho en Polea', grupo: 'Espalda', series: [{peso: 120, reps: 10, done: false}] },
-      { id: 'ex_e2', nombre: 'Remo con Barra Horizontal', grupo: 'Espalda', series: [{peso: 115, reps: 8, done: false}] },
-      { id: 'ex_e3', nombre: 'Remo Unilateral con Mancuerna', grupo: 'Espalda', series: [{peso: 55, reps: 10, done: false}] },
+      { id: 'ex_e1', nombre: 'Jalón al Pecho en Polea', grupo: 'Espalda', series: [{peso: 0, reps: 10, done: false}] },
+      { id: 'ex_e2', nombre: 'Remo con Barra Horizontal', grupo: 'Espalda', series: [{peso: 0, reps: 8, done: false}] },
+      { id: 'ex_e3', nombre: 'Remo Unilateral con Mancuerna', grupo: 'Espalda', series: [{peso: 0, reps: 10, done: false}] },
       { id: 'ex_e4', nombre: 'Dominadas Pronadas', grupo: 'Espalda', series: [{peso: 0, reps: 8, done: false}] },
-      { id: 'ex_b1', nombre: 'Curl de Bíceps con Barra Z', grupo: 'Bíceps', series: [{peso: 45, reps: 10, done: false}] },
-      { id: 'ex_b2', nombre: 'Curl Martillo con Mancuernas', grupo: 'Bíceps', series: [{peso: 30, reps: 12, done: false}] },
-      { id: 'ex_b3', nombre: 'Curl Banco Predicador (Scott)', grupo: 'Bíceps', series: [{peso: 35, reps: 10, done: false}] }
+      { id: 'ex_e5', nombre: 'Pull-over en Polea Alta', grupo: 'Espalda', series: [{peso: 0, reps: 12, done: false}] },
+      { id: 'ex_b1', nombre: 'Curl de Bíceps con Barra Z', grupo: 'Bíceps', series: [{peso: 0, reps: 10, done: false}] },
+      { id: 'ex_b2', nombre: 'Curl Martillo con Mancuernas', grupo: 'Bíceps', series: [{peso: 0, reps: 12, done: false}] },
+      { id: 'ex_b3', nombre: 'Curl Banco Predicador (Scott)', grupo: 'Bíceps', series: [{peso: 0, reps: 10, done: false}] },
+      { id: 'ex_b4', nombre: 'Curl Concentrado', grupo: 'Bíceps', series: [{peso: 0, reps: 12, done: false}] }
     ]
   },
   {
     id: 'rut_pierna_hombro',
     nombre: 'Pierna Completa & Hombro',
     ejercicios: [
-      { id: 'ex_pi1', nombre: 'Sentadilla Libre con Barra', grupo: 'Pierna', series: [{peso: 185, reps: 8, done: false}] },
-      { id: 'ex_pi2', nombre: 'Prensa 45°', grupo: 'Pierna', series: [{peso: 250, reps: 10, done: false}] },
-      { id: 'ex_pi3', nombre: 'Extensión de Cuádriceps', grupo: 'Pierna', series: [{peso: 90, reps: 12, done: false}] },
-      { id: 'ex_pi4', nombre: 'Curl Femoral Tumbado', grupo: 'Pierna', series: [{peso: 70, reps: 12, done: false}] },
-      { id: 'ex_pi5', nombre: 'Elevación de Gemelos en Máquina', grupo: 'Pierna', series: [{peso: 100, reps: 15, done: false}] },
-      { id: 'ex_h1', nombre: 'Press Militar de Hombros', grupo: 'Hombro', series: [{peso: 75, reps: 10, done: false}] },
-      { id: 'ex_h2', nombre: 'Elevaciones Laterales con Mancuernas', grupo: 'Hombro', series: [{peso: 20, reps: 15, done: false}] },
-      { id: 'ex_h3', nombre: 'Pájaro / Pájaros en Polea (Deltoides Post)', grupo: 'Hombro', series: [{peso: 15, reps: 12, done: false}] }
+      { id: 'ex_pi1', nombre: 'Sentadilla Libre con Barra', grupo: 'Pierna', series: [{peso: 0, reps: 8, done: false}] },
+      { id: 'ex_pi2', nombre: 'Prensa 45°', grupo: 'Pierna', series: [{peso: 0, reps: 10, done: false}] },
+      { id: 'ex_pi3', nombre: 'Extensión de Cuádriceps', grupo: 'Pierna', series: [{peso: 0, reps: 12, done: false}] },
+      { id: 'ex_pi4', nombre: 'Curl Femoral Tumbado', grupo: 'Pierna', series: [{peso: 0, reps: 12, done: false}] },
+      { id: 'ex_pi5', nombre: 'Elevación de Gemelos en Máquina', grupo: 'Pierna', series: [{peso: 0, reps: 15, done: false}] },
+      { id: 'ex_pi6', nombre: 'Zancadas / Desplantes', grupo: 'Pierna', series: [{peso: 0, reps: 10, done: false}] },
+      { id: 'ex_h1', nombre: 'Press Militar de Hombros', grupo: 'Hombro', series: [{peso: 0, reps: 10, done: false}] },
+      { id: 'ex_h2', nombre: 'Elevaciones Laterales con Mancuernas', grupo: 'Hombro', series: [{peso: 0, reps: 15, done: false}] },
+      { id: 'ex_h3', nombre: 'Pájaro / Deltoides Posterior', grupo: 'Hombro', series: [{peso: 0, reps: 12, done: false}] },
+      { id: 'ex_h4', nombre: 'Encogimientos para Trapecio', grupo: 'Hombro', series: [{peso: 0, reps: 12, done: false}] }
     ]
   }
 ];
 
-// --- LÓGICA DE SELECCIÓN DE DÍAS (3 TOQUES) ---
+// --- NUEVA LÓGICA DE ASISTENCIA: CICLO DE 3 TOQUES ---
+// 1er toque: 'trained' (Entrenado - Verde)
+// 2do toque: 'rest' (Descanso - Gris/Naranja)
+// 3er toque: Elimina la propiedad (Día vacío / Sin marcar)
 function toggleDayAttendance(dateKey) {
-  const current = state.asistencia[dateKey];
-  
-  if (!current) {
-    // 1º toque: Entrenado
-    state.asistencia[dateKey] = 'trained';
-  } else if (current === 'trained') {
-    // 2º toque: Descanso
-    state.asistencia[dateKey] = 'rest';
+  const currentStatus = state.asistencia[dateKey];
+
+  if (!currentStatus) {
+    state.asistencia[dateKey] = 'trained'; // 1er toque
+  } else if (currentStatus === 'trained') {
+    state.asistencia[dateKey] = 'rest';     // 2do toque
   } else {
-    // 3º toque: Eliminar selección
-    delete state.asistencia[dateKey];
+    delete state.asistencia[dateKey];       // 3er toque: borra por completo
   }
 
   saveState();
-  renderCalendar();
+  renderCalendar(); // O la función que actualice la vista de tu calendario
 }
