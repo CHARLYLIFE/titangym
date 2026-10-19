@@ -1,67 +1,1076 @@
-// --- RUTINAS Y EJERCICIOS AMPLIADOS POR GRUPO MUSCULAR ---
-const defaultRoutines = [
-  {
-    id: 'rut_pecho_triceps',
-    nombre: 'Pecho & Tríceps (Empuje)',
-    ejercicios: [
-      { id: 'ex_p1', nombre: 'Press de Banca Plano con Barra', grupo: 'Pecho', series: [{peso: 0, reps: 10, done: false}, {peso: 0, reps: 8, done: false}] },
-      { id: 'ex_p2', nombre: 'Press Inclinado con Mancuernas', grupo: 'Pecho', series: [{peso: 0, reps: 10, done: false}] },
-      { id: 'ex_p3', nombre: 'Aperturas / Cruce de Poleas', grupo: 'Pecho', series: [{peso: 0, reps: 12, done: false}] },
-      { id: 'ex_p4', nombre: 'Press Declinado', grupo: 'Pecho', series: [{peso: 0, reps: 10, done: false}] },
-      { id: 'ex_t1', nombre: 'Fondos en Paralelas (Dips)', grupo: 'Tríceps', series: [{peso: 0, reps: 10, done: false}] },
-      { id: 'ex_t2', nombre: 'Extensiones de Tríceps en Polea Alta', grupo: 'Tríceps', series: [{peso: 0, reps: 12, done: false}] },
-      { id: 'ex_t3', nombre: 'Press Francés con Barra Z', grupo: 'Tríceps', series: [{peso: 0, reps: 10, done: false}] },
-      { id: 'ex_t4', nombre: 'Patada de Tríceps con Mancuerna', grupo: 'Tríceps', series: [{peso: 0, reps: 12, done: false}] }
-    ]
-  },
-  {
-    id: 'rut_espalda_biceps',
-    nombre: 'Espalda & Bíceps (Tracción)',
-    ejercicios: [
-      { id: 'ex_e1', nombre: 'Jalón al Pecho en Polea', grupo: 'Espalda', series: [{peso: 0, reps: 10, done: false}] },
-      { id: 'ex_e2', nombre: 'Remo con Barra Horizontal', grupo: 'Espalda', series: [{peso: 0, reps: 8, done: false}] },
-      { id: 'ex_e3', nombre: 'Remo Unilateral con Mancuerna', grupo: 'Espalda', series: [{peso: 0, reps: 10, done: false}] },
-      { id: 'ex_e4', nombre: 'Dominadas Pronadas', grupo: 'Espalda', series: [{peso: 0, reps: 8, done: false}] },
-      { id: 'ex_e5', nombre: 'Pull-over en Polea Alta', grupo: 'Espalda', series: [{peso: 0, reps: 12, done: false}] },
-      { id: 'ex_b1', nombre: 'Curl de Bíceps con Barra Z', grupo: 'Bíceps', series: [{peso: 0, reps: 10, done: false}] },
-      { id: 'ex_b2', nombre: 'Curl Martillo con Mancuernas', grupo: 'Bíceps', series: [{peso: 0, reps: 12, done: false}] },
-      { id: 'ex_b3', nombre: 'Curl Banco Predicador (Scott)', grupo: 'Bíceps', series: [{peso: 0, reps: 10, done: false}] },
-      { id: 'ex_b4', nombre: 'Curl Concentrado', grupo: 'Bíceps', series: [{peso: 0, reps: 12, done: false}] }
-    ]
-  },
-  {
-    id: 'rut_pierna_hombro',
-    nombre: 'Pierna Completa & Hombro',
-    ejercicios: [
-      { id: 'ex_pi1', nombre: 'Sentadilla Libre con Barra', grupo: 'Pierna', series: [{peso: 0, reps: 8, done: false}] },
-      { id: 'ex_pi2', nombre: 'Prensa 45°', grupo: 'Pierna', series: [{peso: 0, reps: 10, done: false}] },
-      { id: 'ex_pi3', nombre: 'Extensión de Cuádriceps', grupo: 'Pierna', series: [{peso: 0, reps: 12, done: false}] },
-      { id: 'ex_pi4', nombre: 'Curl Femoral Tumbado', grupo: 'Pierna', series: [{peso: 0, reps: 12, done: false}] },
-      { id: 'ex_pi5', nombre: 'Elevación de Gemelos en Máquina', grupo: 'Pierna', series: [{peso: 0, reps: 15, done: false}] },
-      { id: 'ex_pi6', nombre: 'Zancadas / Desplantes', grupo: 'Pierna', series: [{peso: 0, reps: 10, done: false}] },
-      { id: 'ex_h1', nombre: 'Press Militar de Hombros', grupo: 'Hombro', series: [{peso: 0, reps: 10, done: false}] },
-      { id: 'ex_h2', nombre: 'Elevaciones Laterales con Mancuernas', grupo: 'Hombro', series: [{peso: 0, reps: 15, done: false}] },
-      { id: 'ex_h3', nombre: 'Pájaro / Deltoides Posterior', grupo: 'Hombro', series: [{peso: 0, reps: 12, done: false}] },
-      { id: 'ex_h4', nombre: 'Encogimientos para Trapecio', grupo: 'Hombro', series: [{peso: 0, reps: 12, done: false}] }
-    ]
-  }
-];
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>App de Gimnasio Premium</title>
+  
+  <!-- Iconos Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-// --- NUEVA LÓGICA DE ASISTENCIA: CICLO DE 3 TOQUES ---
-// 1er toque: 'trained' (Entrenado - Verde)
-// 2do toque: 'rest' (Descanso - Gris/Naranja)
-// 3er toque: Elimina la propiedad (Día vacío / Sin marcar)
-function toggleDayAttendance(dateKey) {
-  const currentStatus = state.asistencia[dateKey];
+  <style>
+    :root {
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #334155;
+      --primary: #38bdf8;
+      --primary-dark: #0284c7;
+      --success: #22c55e;
+      --rest: #64748b;
+      --danger: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
 
-  if (!currentStatus) {
-    state.asistencia[dateKey] = 'trained'; // 1er toque
-  } else if (currentStatus === 'trained') {
-    state.asistencia[dateKey] = 'rest';     // 2do toque
-  } else {
-    delete state.asistencia[dateKey];       // 3er toque: borra por completo
-  }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-  saveState();
-  renderCalendar(); // O la función que actualice la vista de tu calendario
-}
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      padding-bottom: 80px;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: var(--bg-card);
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .app-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .unit-toggle {
+      display: flex;
+      background: var(--bg-main);
+      border-radius: 8px;
+      padding: 2px;
+      border: 1px solid var(--border);
+    }
+
+    .unit-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .unit-btn.active {
+      background: var(--primary);
+      color: var(--bg-main);
+    }
+
+    main {
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    /* CALENDARIO & ASISTENCIA */
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      background: var(--bg-card);
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .calendar-title {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .month-nav {
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .weekdays-grid, .days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      text-align: center;
+    }
+
+    .weekdays-grid {
+      margin-bottom: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .day-cell {
+      background: var(--bg-card);
+      border-radius: 10px;
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      position: relative;
+      user-select: none;
+    }
+
+    .day-cell.empty {
+      background: transparent;
+      border: none;
+      cursor: default;
+    }
+
+    .day-cell.today {
+      border-color: var(--primary);
+    }
+
+    .day-cell.trained {
+      background: rgba(34, 197, 94, 0.2);
+      border-color: var(--success);
+      color: #4ade80;
+    }
+
+    .day-cell.rest {
+      background: rgba(100, 116, 139, 0.2);
+      border-color: var(--rest);
+      color: #cbd5e1;
+    }
+
+    .day-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      margin-top: 2px;
+    }
+
+    .trained .day-dot { background: var(--success); }
+    .rest .day-dot { background: var(--rest); }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* RUTINAS Y EJERCICIOS */
+    .routine-selector {
+      width: 100%;
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      outline: none;
+    }
+
+    .timer-bar {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .timer-display {
+      font-family: monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .exercise-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .exercise-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .ex-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .ex-tag {
+      font-size: 0.7rem;
+      background: var(--bg-main);
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-left: 6px;
+    }
+
+    .pr-badge {
+      font-size: 0.75rem;
+      color: #f59e0b;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .sets-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+    }
+
+    .sets-table th {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding-bottom: 6px;
+    }
+
+    .set-row td {
+      padding: 4px;
+      text-align: center;
+    }
+
+    .set-num {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .set-input {
+      width: 60px;
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      text-align: center;
+      padding: 6px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .check-btn {
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .check-btn.done {
+      background: var(--success);
+      color: white;
+      border-color: var(--success);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn-text {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-text.danger {
+      color: var(--danger);
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--primary);
+      color: var(--bg-main);
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    /* MODAL */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 200;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 10px;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    /* PROGRESO Y RÉCORDS */
+    .pr-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--border);
+    }
+
+    .pr-info h4 {
+      font-size: 0.95rem;
+    }
+
+    .pr-info p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .pr-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f59e0b;
+      text-align: right;
+    }
+
+    /* BOTTOM NAV */
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      z-index: 100;
+    }
+
+    .nav-item {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .icon-btn {
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="app-title">
+      <i data-lucide="dumbbell"></i> FitControl APK
+    </div>
+    <div class="unit-toggle">
+      <button class="unit-btn active" id="btnLbs" onclick="toggleUnidad('lbs')">LBS</button>
+      <button class="unit-btn" id="btnKg" onclick="toggleUnidad('kg')">KG</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- VISTA 1: CALENDARIO DE ASISTENCIA -->
+    <section id="view-calendar" class="view active">
+      <div class="calendar-header">
+        <button class="month-nav" onclick="cambiarMes(-1)"><i data-lucide="chevron-left"></i></button>
+        <div class="calendar-title" id="monthTitle">Octubre 2026</div>
+        <button class="month-nav" onclick="cambiarMes(1)"><i data-lucide="chevron-right"></i></button>
+      </div>
+
+      <div class="weekdays-grid">
+        <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+      </div>
+
+      <div class="days-grid" id="daysGrid"></div>
+
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-value" id="statMes">0</div>
+          <div class="stat-label">Días este mes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statRacha">0</div>
+          <div class="stat-label">Racha actual</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statTotal">0</div>
+          <div class="stat-label">Total entrenos</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA 2: RUTINA / ENTRENO DEL DÍA -->
+    <section id="view-workout" class="view">
+      <div class="timer-bar">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <i data-lucide="timer" style="color:var(--primary);"></i>
+          <span style="font-size:0.8rem; color:var(--text-muted);">Descanso:</span>
+          <span class="timer-display" id="timerDisplay">00:00</span>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="icon-btn" onclick="startTimer(60)">+60s</button>
+          <button class="icon-btn" onclick="resetTimer()"><i data-lucide="rotate-ccw" style="width:14px;"></i></button>
+        </div>
+      </div>
+
+      <select class="routine-selector" id="routineSelect" onchange="cargarRutinaSeleccionada()"></select>
+
+      <div id="exercisesContainer"></div>
+
+      <button class="btn-primary" onclick="abrirModalAgregarEjercicio()">
+        <i data-lucide="plus"></i> Añadir Ejercicio
+      </button>
+    </section>
+
+    <!-- VISTA 3: PROGRESO / RÉCORDS -->
+    <section id="view-progress" class="view">
+      <div style="margin-bottom:12px;">
+        <h3 style="font-size:1.1rem;">🏆 Récords Personales (PR)</h3>
+      </div>
+      <div id="prContainer"></div>
+    </section>
+
+    <!-- VISTA 4: GESTOR DE RUTINAS -->
+    <section id="view-routines" class="view">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="font-size:1.1rem;">⚙️ Mis Rutinas</h3>
+        <button class="btn-text" onclick="crearNuevaRutina()">+ Nueva Rutina</button>
+      </div>
+      <div id="routinesListContainer"></div>
+    </section>
+  </main>
+
+  <!-- MODAL AÑADIR EJERCICIO -->
+  <div class="modal" id="modalEjercicio">
+    <div class="modal-content">
+      <div class="modal-title">Añadir Ejercicio</div>
+      <div class="form-group">
+        <label class="form-label">Nombre del Ejercicio</label>
+        <input type="text" id="inputExNombre" class="form-input" placeholder="ej. Press Declinado">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Grupo Muscular</label>
+        <input type="text" id="inputExGrupo" class="form-input" placeholder="ej. Pecho">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-primary" style="background:var(--bg-main); color:white;" onclick="cerrarModal('modalEjercicio')">Cancelar</button>
+        <button class="btn-primary" onclick="guardarNuevoEjercicio()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVEGACIÓN INFERIOR -->
+  <nav>
+    <button class="nav-item active" onclick="switchTab('calendar', this)">
+      <i data-lucide="calendar"></i>
+      <span>Asistencia</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('workout', this)">
+      <i data-lucide="dumbbell"></i>
+      <span>Entreno</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('progress', this)">
+      <i data-lucide="trophy"></i>
+      <span>Récords</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('routines', this)">
+      <i data-lucide="layers"></i>
+      <span>Rutinas</span>
+    </button>
+  </nav>
+
+  <script>
+    // --- RUTINAS EXTENDIDAS POR GRUPO MUSCULAR ---
+    const defaultRoutines = [
+      {
+        id: 'rut_pecho_triceps',
+        nombre: 'Pecho & Tríceps (Empuje)',
+        ejercicios: [
+          { id: 'ex_p1', nombre: 'Press de Banca Plano con Barra', grupo: 'Pecho', series: [{peso: 135, reps: 10, done: false}, {peso: 155, reps: 8, done: false}] },
+          { id: 'ex_p2', nombre: 'Press Inclinado con Mancuernas', grupo: 'Pecho', series: [{peso: 50, reps: 10, done: false}] },
+          { id: 'ex_p3', nombre: 'Aperturas / Cruce de Poleas', grupo: 'Pecho', series: [{peso: 30, reps: 12, done: false}] },
+          { id: 'ex_p4', nombre: 'Press Declinado', grupo: 'Pecho', series: [{peso: 120, reps: 10, done: false}] },
+          { id: 'ex_t1', nombre: 'Fondos en Paralelas (Dips)', grupo: 'Tríceps', series: [{peso: 0, reps: 10, done: false}] },
+          { id: 'ex_t2', nombre: 'Extensiones de Tríceps en Polea', grupo: 'Tríceps', series: [{peso: 45, reps: 12, done: false}] },
+          { id: 'ex_t3', nombre: 'Press Francés con Barra Z', grupo: 'Tríceps', series: [{peso: 40, reps: 10, done: false}] }
+        ]
+      },
+      {
+        id: 'rut_espalda_biceps',
+        nombre: 'Espalda & Bíceps (Tracción)',
+        ejercicios: [
+          { id: 'ex_e1', nombre: 'Jalón al Pecho en Polea', grupo: 'Espalda', series: [{peso: 120, reps: 10, done: false}] },
+          { id: 'ex_e2', nombre: 'Remo con Barra Horizontal', grupo: 'Espalda', series: [{peso: 115, reps: 8, done: false}] },
+          { id: 'ex_e3', nombre: 'Remo Unilateral con Mancuerna', grupo: 'Espalda', series: [{peso: 55, reps: 10, done: false}] },
+          { id: 'ex_e4', nombre: 'Dominadas Pronadas', grupo: 'Espalda', series: [{peso: 0, reps: 8, done: false}] },
+          { id: 'ex_b1', nombre: 'Curl de Bíceps con Barra Z', grupo: 'Bíceps', series: [{peso: 45, reps: 10, done: false}] },
+          { id: 'ex_b2', nombre: 'Curl Martillo con Mancuernas', grupo: 'Bíceps', series: [{peso: 30, reps: 12, done: false}] },
+          { id: 'ex_b3', nombre: 'Curl Banco Predicador (Scott)', grupo: 'Bíceps', series: [{peso: 35, reps: 10, done: false}] }
+        ]
+      },
+      {
+        id: 'rut_pierna_hombro',
+        nombre: 'Pierna Completa & Hombro',
+        ejercicios: [
+          { id: 'ex_pi1', nombre: 'Sentadilla Libre con Barra', grupo: 'Pierna', series: [{peso: 185, reps: 8, done: false}] },
+          { id: 'ex_pi2', nombre: 'Prensa 45°', grupo: 'Pierna', series: [{peso: 250, reps: 10, done: false}] },
+          { id: 'ex_pi3', nombre: 'Extensión de Cuádriceps', grupo: 'Pierna', series: [{peso: 90, reps: 12, done: false}] },
+          { id: 'ex_pi4', nombre: 'Curl Femoral Tumbado', grupo: 'Pierna', series: [{peso: 70, reps: 12, done: false}] },
+          { id: 'ex_pi5', nombre: 'Elevación de Gemelos en Máquina', grupo: 'Pierna', series: [{peso: 100, reps: 15, done: false}] },
+          { id: 'ex_h1', nombre: 'Press Militar de Hombros', grupo: 'Hombro', series: [{peso: 75, reps: 10, done: false}] },
+          { id: 'ex_h2', nombre: 'Elevaciones Laterales con Mancuernas', grupo: 'Hombro', series: [{peso: 20, reps: 15, done: false}] },
+          { id: 'ex_h3', nombre: 'Pájaro / Deltoides Posterior', grupo: 'Hombro', series: [{peso: 15, reps: 12, done: false}] }
+        ]
+      }
+    ];
+
+    // --- ESTADO INICIAL ---
+    let currentUnit = 'lbs';
+    let currentDate = new Date();
+    let activeMonth = currentDate.getMonth();
+    let activeYear = currentDate.getFullYear();
+    let timerInterval = null;
+    let timerSeconds = 0;
+
+    let state = {
+      rutinas: JSON.parse(localStorage.getItem('fit_rutinas')) || defaultRoutines,
+      asistencia: JSON.parse(localStorage.getItem('fit_asistencia')) || {},
+      records: JSON.parse(localStorage.getItem('fit_records')) || {},
+      activeRoutineId: 'rut_pecho_triceps'
+    };
+
+    function saveState() {
+      localStorage.setItem('fit_rutinas', JSON.stringify(state.rutinas));
+      localStorage.setItem('fit_asistencia', JSON.stringify(state.asistencia));
+      localStorage.setItem('fit_records', JSON.stringify(state.records));
+    }
+
+    // --- NAVEGACIÓN DE PESTAÑAS ---
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
+
+      el.classList.add('active');
+      document.getElementById(`view-${tabId}`).classList.add('active');
+
+      if (tabId === 'calendar') renderCalendar();
+      if (tabId === 'workout') renderWorkout();
+      if (tabId === 'progress') renderProgress();
+      if (tabId === 'routines') renderRoutinesManager();
+    }
+
+    function toggleUnidad(unit) {
+      currentUnit = unit;
+      document.getElementById('btnLbs').classList.toggle('active', unit === 'lbs');
+      document.getElementById('btnKg').classList.toggle('active', unit === 'kg');
+      renderWorkout();
+      renderProgress();
+    }
+
+    // --- LÓGICA DEL CALENDARIO (3 TOQUES) ---
+    function renderCalendar() {
+      const grid = document.getElementById('daysGrid');
+      grid.innerHTML = '';
+
+      const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+      document.getElementById('monthTitle').innerText = `${monthNames[activeMonth]} ${activeYear}`;
+
+      const firstDay = new Date(activeYear, activeMonth, 1).getDay();
+      const totalDays = new Date(activeYear, activeMonth + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'day-cell empty';
+        grid.appendChild(empty);
+      }
+
+      let countEntrenosMes = 0;
+
+      for (let day = 1; day <= totalDays; day++) {
+        const dateKey = `${String(activeMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const cell = document.createElement('div');
+        cell.className = 'day-cell';
+        cell.innerText = day;
+
+        const status = state.asistencia[dateKey];
+        if (status === 'trained') {
+          cell.classList.add('trained');
+          cell.innerHTML += '<div class="day-dot"></div>';
+          countEntrenosMes++;
+        } else if (status === 'rest') {
+          cell.classList.add('rest');
+          cell.innerHTML += '<div class="day-dot"></div>';
+        }
+
+        const today = new Date();
+        if (day === today.getDate() && activeMonth === today.getMonth() && activeYear === today.getFullYear()) {
+          cell.classList.add('today');
+        }
+
+        cell.onclick = () => toggleDayAttendance(dateKey);
+        grid.appendChild(cell);
+      }
+
+      document.getElementById('statMes').innerText = countEntrenosMes;
+      document.getElementById('statTotal').innerText = Object.values(state.asistencia).filter(s => s === 'trained').length;
+      document.getElementById('statRacha').innerText = calcularRachaActual();
+    }
+
+    function cambiarMes(delta) {
+      activeMonth += delta;
+      if (activeMonth < 0) { activeMonth = 11; activeYear--; }
+      if (activeMonth > 11) { activeMonth = 0; activeYear++; }
+      renderCalendar();
+    }
+
+    // CICLO DE 3 TOQUES: Entrenado -> Descanso -> Eliminar Selección
+    function toggleDayAttendance(dateKey) {
+      const current = state.asistencia[dateKey];
+      if (!current) {
+        state.asistencia[dateKey] = 'trained'; // 1º toque
+      } else if (current === 'trained') {
+        state.asistencia[dateKey] = 'rest';    // 2º toque
+      } else {
+        delete state.asistencia[dateKey];      // 3º toque
+      }
+
+      saveState();
+      renderCalendar();
+    }
+
+    function calcularRachaActual() {
+      let racha = 0;
+      let checkDate = new Date();
+
+      while (true) {
+        const key = `${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`;
+        if (state.asistencia[key] === 'trained') {
+          racha++;
+          checkDate.setDate(checkDate.getDate() - 1);
+        } else break;
+      }
+      return racha;
+    }
+
+    // --- LÓGICA DE RUTINAS Y ENTRENO ---
+    function cargarRutinaSeleccionada() {
+      const select = document.getElementById('routineSelect');
+      state.activeRoutineId = select.value;
+      renderWorkout();
+    }
+
+    function renderRoutineSelector() {
+      const select = document.getElementById('routineSelect');
+      select.innerHTML = '';
+      state.rutinas.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r.id;
+        opt.innerText = `📋 ${r.nombre}`;
+        if (r.id === state.activeRoutineId) opt.selected = true;
+        select.appendChild(opt);
+      });
+    }
+
+    function renderWorkout() {
+      renderRoutineSelector();
+      const container = document.getElementById('exercisesContainer');
+      container.innerHTML = '';
+
+      const rutina = state.rutinas.find(r => r.id === state.activeRoutineId);
+      if (!rutina || !rutina.ejercicios.length) {
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:20px;">No hay ejercicios en esta rutina.</p>';
+        return;
+      }
+
+      rutina.ejercicios.forEach((ex) => {
+        const pr = state.records[ex.nombre] || { peso: 0, reps: 0 };
+        const card = document.createElement('div');
+        card.className = 'exercise-card';
+
+        let rowsHtml = '';
+        ex.series.forEach((s, setIdx) => {
+          rowsHtml += `
+            <tr class="set-row">
+              <td class="set-num">${setIdx + 1}</td>
+              <td><input type="number" class="set-input" value="${s.peso}" onchange="updateSet('${ex.id}', ${setIdx}, 'peso', this.value)"></td>
+              <td><input type="number" class="set-input" value="${s.reps}" onchange="updateSet('${ex.id}', ${setIdx}, 'reps', this.value)"></td>
+              <td>
+                <button class="check-btn ${s.done ? 'done' : ''}" onclick="toggleSetDone('${ex.id}', ${setIdx})">
+                  <i data-lucide="check" style="width:16px;"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="exercise-card-header">
+            <div>
+              <span class="ex-title">${ex.nombre}</span>
+              <span class="ex-tag">${ex.grupo || 'General'}</span>
+            </div>
+          </div>
+          <div class="pr-badge">
+            <i data-lucide="award" style="width:14px;"></i> PR: ${pr.peso} ${currentUnit.toUpperCase()}
+          </div>
+          <table class="sets-table">
+            <thead>
+              <tr>
+                <th>Serie</th>
+                <th>${currentUnit.toUpperCase()}</th>
+                <th>Reps</th>
+                <th>OK</th>
+              </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+          <div class="card-actions">
+            <button class="btn-text" onclick="addSet('${ex.id}')">+ Añadir Serie</button>
+            <button class="btn-text danger" onclick="deleteExercise('${ex.id}')">Eliminar</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    function updateSet(exId, setIdx, field, val) {
+      const rutina = state.rutinas.find(r => r.id === state.activeRoutineId);
+      const ex = rutina.ejercicios.find(e => e.id === exId);
+      ex.series[setIdx][field] = parseFloat(val) || 0;
+
+      if (field === 'peso' || field === 'reps') {
+        const peso = ex.series[setIdx].peso;
+        const reps = ex.series[setIdx].reps;
+        const prevPR = state.records[ex.nombre] || { peso: 0 };
+
+        if (peso > prevPR.peso) {
+          state.records[ex.nombre] = { peso: peso, reps: reps, fecha: new Date().toLocaleDateString() };
+        }
+      }
+      saveState();
+    }
+
+    function toggleSetDone(exId, setIdx) {
+      const rutina = state.rutinas.find(r => r.id === state.activeRoutineId);
+      const ex = rutina.ejercicios.find(e => e.id === exId);
+      ex.series[setIdx].done = !ex.series[setIdx].done;
+
+      if (ex.series[setIdx].done) {
+        const todayKey = `${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+        state.asistencia[todayKey] = 'trained';
+        startTimer(90);
+      }
+
+      saveState();
+      renderWorkout();
+    }
+
+    function addSet(exId) {
+      const rutina = state.rutinas.find(r => r.id === state.activeRoutineId);
+      const ex = rutina.ejercicios.find(e => e.id === exId);
+      const lastSet = ex.series[ex.series.length - 1] || { peso: 0, reps: 10 };
+      ex.series.push({ peso: lastSet.peso, reps: lastSet.reps, done: false });
+      saveState();
+      renderWorkout();
+    }
+
+    function deleteExercise(exId) {
+      const rutina = state.rutinas.find(r => r.id === state.activeRoutineId);
+      rutina.ejercicios = rutina.ejercicios.filter(e => e.id !== exId);
+      saveState();
+      renderWorkout();
+    }
+
+    // --- TEMPORIZADOR DE DESCANSO ---
+    function startTimer(seconds) {
+      clearInterval(timerInterval);
+      timerSeconds = seconds;
+      updateTimerDisplay();
+
+      timerInterval = setInterval(() => {
+        timerSeconds--;
+        updateTimerDisplay();
+        if (timerSeconds <= 0) clearInterval(timerInterval);
+      }, 1000);
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerSeconds = 0;
+      updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timerSeconds / 60);
+      const secs = timerSeconds % 60;
+      document.getElementById('timerDisplay').innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // --- MODAL AÑADIR EJERCICIO ---
+    function abrirModalAgregarEjercicio() {
+      document.getElementById('modalEjercicio').classList.add('active');
+    }
+
+    function cerrarModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    function guardarNuevoEjercicio() {
+      const nombre = document.getElementById('inputExNombre').value.trim();
+      const grupo = document.getElementById('inputExGrupo').value.trim();
+
+      if (!nombre) return;
+
+      const rutina = state.rutinas.find(r => r.id === state.activeRoutineId);
+      rutina.ejercicios.push({
+        id: 'ex_' + Date.now(),
+        nombre: nombre,
+        grupo: grupo || 'General',
+        series: [{ peso: 0, reps: 10, done: false }]
+      });
+
+      saveState();
+      cerrarModal('modalEjercicio');
+      document.getElementById('inputExNombre').value = '';
+      renderWorkout();
+    }
+
+    // --- VISTA PROGRESO ---
+    function renderProgress() {
+      const container = document.getElementById('prContainer');
+      container.innerHTML = '';
+
+      const keys = Object.keys(state.records);
+      if (!keys.length) {
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:20px;">Aún no has registrado ningún Récord Personal (PR).</p>';
+        return;
+      }
+
+      keys.forEach(nombreEx => {
+        const pr = state.records[nombreEx];
+        const card = document.createElement('div');
+        card.className = 'pr-card';
+        card.innerHTML = `
+          <div class="pr-info">
+            <h4>${nombreEx}</h4>
+            <p>Máximo peso registrado</p>
+          </div>
+          <div class="pr-value">
+            ${pr.peso} ${currentUnit}<br>
+            <span style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">x ${pr.reps} reps</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // --- GESTOR DE RUTINAS ---
+    function renderRoutinesManager() {
+      const container = document.getElementById('routinesListContainer');
+      container.innerHTML = '';
+
+      state.rutinas.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'exercise-card';
+        card.innerHTML = `
+          <div class="exercise-card-header">
+            <div>
+              <span class="ex-title">${r.nombre}</span>
+              <span class="ex-tag">${r.ejercicios.length} ejercicios</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="btn-text" onclick="seleccionarYEntrenar('${r.id}')">Seleccionar & Entrenar</button>
+            <button class="btn-text danger" onclick="eliminarRutina('${r.id}')">Eliminar</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function crearNuevaRutina() {
+      const nombre = prompt("Nombre de la nueva rutina (ej. Pierna / Hombro):");
+      if (!nombre || !nombre.trim()) return;
+
+      const nueva = {
+        id: 'rut_' + Date.now(),
+        nombre: nombre.trim(),
+        ejercicios: []
+      };
+
+      state.rutinas.push(nueva);
+      state.activeRoutineId = nueva.id;
+      saveState();
+      renderRoutinesManager();
+    }
+
+    function seleccionarYEntrenar(id) {
+      state.activeRoutineId = id;
+      switchTab('workout', document.querySelectorAll('.nav-item')[1]);
+    }
+
+    function eliminarRutina(id) {
+      if (state.rutinas.length <= 1) {
+        alert("Debes mantener al menos una rutina activa.");
+        return;
+      }
+      state.rutinas = state.rutinas.filter(r => r.id !== id);
+      state.activeRoutineId = state.rutinas[0].id;
+      saveState();
+      renderRoutinesManager();
+    }
+
+    // --- INICIALIZACIÓN ---
+    lucide.createIcons();
+    renderCalendar();
+    renderWorkout();
+  </script>
+</body>
+</html>
