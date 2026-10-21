@@ -18,9 +18,11 @@
       --accent-purple: #a855f7;
       --gold: #fbbf24;
       --success: #10b981;
-      --success-bg: rgba(16, 185, 129, 0.18);
+      --success-bg: rgba(16, 185, 129, 0.2);
       --danger: #f43f5e;
-      --danger-bg: rgba(244, 63, 94, 0.18);
+      --danger-bg: rgba(244, 63, 94, 0.2);
+      --weekend: #3b82f6;
+      --weekend-bg: rgba(59, 130, 246, 0.2);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --border: #2a3652;
@@ -175,10 +177,16 @@
       color: #34d399;
     }
 
-    .day-cell.rest {
+    .day-cell.failed {
       background: var(--danger-bg);
       border-color: var(--danger);
       color: #fb7185;
+    }
+
+    .day-cell.weekend-rest {
+      background: var(--weekend-bg);
+      border-color: var(--weekend);
+      color: #60a5fa;
     }
 
     .mark-icon {
@@ -204,8 +212,8 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     }
 
-    .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
-    .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; font-weight: 600; }
+    .stat-value { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+    .stat-label { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; font-weight: 600; }
 
     /* VISTAS SECCIONES (PESOS Y PR) */
     .section-title {
@@ -380,23 +388,23 @@
 
       <div class="days-grid" id="daysGrid"></div>
 
-      <!-- ESTADÍSTICAS RECOMPUESTAS -->
+      <!-- ESTADÍSTICAS REORGANIZADAS -->
       <div class="stats-container">
         <div class="stat-card">
-          <div class="stat-value" id="statMes" style="color:var(--success);">0</div>
+          <div class="stat-value" id="statInicio" style="color:var(--accent-purple);">0 días</div>
+          <div class="stat-label">Empezaste Hace</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statEfectividad" style="color:var(--gold);">0%</div>
+          <div class="stat-label">Efectividad Global</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statFallados" style="color:var(--danger);">0</div>
+          <div class="stat-label">Días Fallados (Este Mes)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statEntrenos" style="color:var(--success);">0</div>
           <div class="stat-label">Días Entrenados (Este Mes)</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="statDescanso" style="color:var(--danger);">0</div>
-          <div class="stat-label">Días Descanso (Este Mes)</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="statRacha" style="color:var(--gold);">0</div>
-          <div class="stat-label">Racha Actual (Días)</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="statTotal" style="color:var(--primary);">0</div>
-          <div class="stat-label">Total Entrenos Histórico</div>
         </div>
       </div>
     </section>
@@ -504,13 +512,18 @@
     let activeYear = currentDate.getFullYear();
 
     let state = {
-      asistencia: JSON.parse(localStorage.getItem('fit_asistencia_v5')) || {},
-      ejercicios: JSON.parse(localStorage.getItem('fit_ejercicios_v5')) || defaultEjercicios
+      startDate: localStorage.getItem('fit_start_date_v6') || new Date().toISOString().split('T')[0],
+      asistencia: JSON.parse(localStorage.getItem('fit_asistencia_v6')) || {},
+      ejercicios: JSON.parse(localStorage.getItem('fit_ejercicios_v6')) || defaultEjercicios
     };
 
+    if (!localStorage.getItem('fit_start_date_v6')) {
+      localStorage.setItem('fit_start_date_v6', state.startDate);
+    }
+
     function saveState() {
-      localStorage.setItem('fit_asistencia_v5', JSON.stringify(state.asistencia));
-      localStorage.setItem('fit_ejercicios_v5', JSON.stringify(state.ejercicios));
+      localStorage.setItem('fit_asistencia_v6', JSON.stringify(state.asistencia));
+      localStorage.setItem('fit_ejercicios_v6', JSON.stringify(state.ejercicios));
     }
 
     // --- PESTAÑAS ---
@@ -526,7 +539,7 @@
       if (tabId === 'records') renderRecords();
     }
 
-    // --- CALENDARIO CON 3 TOQUES (PLECA VERDE / X ROJA / LIMPIO) ---
+    // --- CALENDARIO (SÁB/DOM EN AZUL DÍA DE DESCANSO / CICLO APLICADO) ---
     function renderCalendar() {
       const grid = document.getElementById('daysGrid');
       grid.innerHTML = '';
@@ -544,24 +557,35 @@
       }
 
       let countEntrenosMes = 0;
-      let countDescansosMes = 0;
+      let countFalladosMes = 0;
 
       for (let day = 1; day <= totalDays; day++) {
+        const dateObj = new Date(activeYear, activeMonth, day);
+        const dayOfWeek = dateObj.getDay(); // 0: Dom, 6: Sáb
+        const isWeekendDay = (dayOfWeek === 0 || dayOfWeek === 6);
+
         const dateKey = `${activeYear}-${String(activeMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const cell = document.createElement('div');
         cell.className = 'day-cell';
         cell.innerText = day;
 
-        const status = state.asistencia[dateKey];
+        // Estado guardado o por defecto si es fin de semana
+        let status = state.asistencia[dateKey];
+        if (!status && isWeekendDay) {
+          status = 'weekend'; // Por defecto azul en sáb/dom
+        }
 
         if (status === 'trained') {
           cell.classList.add('trained');
           cell.innerHTML += '<div class="mark-icon">✔️</div>';
           countEntrenosMes++;
-        } else if (status === 'rest') {
-          cell.classList.add('rest');
+        } else if (status === 'failed') {
+          cell.classList.add('failed');
           cell.innerHTML += '<div class="mark-icon">❌</div>';
-          countDescansosMes++;
+          countFalladosMes++;
+        } else if (status === 'weekend') {
+          cell.classList.add('weekend-rest');
+          cell.innerHTML += '<div class="mark-icon">💤</div>';
         }
 
         const today = new Date();
@@ -569,14 +593,11 @@
           cell.classList.add('today');
         }
 
-        cell.onclick = () => toggleDayAttendance(dateKey);
+        cell.onclick = () => toggleDayAttendance(dateKey, isWeekendDay);
         grid.appendChild(cell);
       }
 
-      document.getElementById('statMes').innerText = countEntrenosMes;
-      document.getElementById('statDescanso').innerText = countDescansosMes;
-      document.getElementById('statTotal').innerText = Object.values(state.asistencia).filter(s => s === 'trained').length;
-      document.getElementById('statRacha').innerText = calcularRachaActual();
+      actualizarEstadisticas(countEntrenosMes, countFalladosMes);
     }
 
     function cambiarMes(delta) {
@@ -586,41 +607,75 @@
       renderCalendar();
     }
 
-    function toggleDayAttendance(dateKey) {
+    // TOQUES SEGÚN DÍA:
+    // Fin de semana (Sáb/Dom): Azul (💤) -> Verde (✔️) -> Rojo (❌) -> Limpio
+    // Día normal (Lun-Vie): Verde (✔️) -> Rojo (❌) -> Limpio
+    function toggleDayAttendance(dateKey, isWeekendDay) {
       const current = state.asistencia[dateKey];
       const phraseBox = document.getElementById('phraseBox');
       const phraseText = document.getElementById('phraseText');
 
-      if (!current) {
-        state.asistencia[dateKey] = 'trained'; // 1º Toque: Verde con Pleca
-        phraseBox.classList.remove('active');
-      } else if (current === 'trained') {
-        state.asistencia[dateKey] = 'rest';    // 2º Toque: Rojo con X
-        
-        const fraseRandom = frasesDuras[Math.floor(Math.random() * frasesDuras.length)];
-        phraseText.innerText = fraseRandom;
-        phraseBox.classList.add('active');
+      if (isWeekendDay) {
+        if (!current || current === 'weekend') {
+          state.asistencia[dateKey] = 'trained'; // 1º toque en Sáb/Dom -> Verde
+          phraseBox.classList.remove('active');
+        } else if (current === 'trained') {
+          state.asistencia[dateKey] = 'failed';  // 2º toque -> Rojo
+          dispararFraseDura(phraseBox, phraseText);
+        } else if (current === 'failed') {
+          delete state.asistencia[dateKey];      // 3º toque -> Limpio
+          phraseBox.classList.remove('active');
+        } else {
+          state.asistencia[dateKey] = 'weekend'; // 4º toque -> Azul
+          phraseBox.classList.remove('active');
+        }
       } else {
-        delete state.asistencia[dateKey];      // 3º Toque: Limpio
-        phraseBox.classList.remove('active');
+        if (!current) {
+          state.asistencia[dateKey] = 'trained'; // 1º toque en Lun-Vie -> Verde
+          phraseBox.classList.remove('active');
+        } else if (current === 'trained') {
+          state.asistencia[dateKey] = 'failed';  // 2º toque -> Rojo
+          dispararFraseDura(phraseBox, phraseText);
+        } else {
+          delete state.asistencia[dateKey];      // 3º toque -> Limpio
+          phraseBox.classList.remove('active');
+        }
       }
 
       saveState();
       renderCalendar();
     }
 
-    function calcularRachaActual() {
-      let racha = 0;
-      let checkDate = new Date();
+    function dispararFraseDura(phraseBox, phraseText) {
+      const fraseRandom = frasesDuras[Math.floor(Math.random() * frasesDuras.length)];
+      phraseText.innerText = fraseRandom;
+      phraseBox.classList.add('active');
+    }
 
-      while (true) {
-        const dateKey = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`;
-        if (state.asistencia[dateKey] === 'trained') {
-          racha++;
-          checkDate.setDate(checkDate.getDate() - 1);
-        } else break;
-      }
-      return racha;
+    function actualizarEstadisticas(countEntrenosMes, countFalladosMes) {
+      // Días desde que empezó
+      const inicioDate = new Date(state.startDate);
+      const hoyDate = new Date();
+      const diffTime = Math.abs(hoyDate - inicioDate);
+      const diasTranscurridos = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+
+      document.getElementById('statInicio').innerText = `${diasTranscurridos} días`;
+      document.getElementById('statFallados').innerText = countFalladosMes;
+      document.getElementById('statEntrenos').innerText = countEntrenosMes;
+
+      // Efectividad Global
+      let totalEntrenadosGlobal = 0;
+      let totalFalladosGlobal = 0;
+
+      Object.values(state.asistencia).forEach(val => {
+        if (val === 'trained') totalEntrenadosGlobal++;
+        if (val === 'failed') totalFalladosGlobal++;
+      });
+
+      const totalRegistrados = totalEntrenadosGlobal + totalFalladosGlobal;
+      const efectividad = totalRegistrados > 0 ? Math.round((totalEntrenadosGlobal / totalRegistrados) * 100) : 100;
+
+      document.getElementById('statEfectividad').innerText = `${efectividad}%`;
     }
 
     // --- REGISTRO DE PESOS DE EJERCICIOS ---
