@@ -76,7 +76,7 @@
 
     /* TARJETA DE FRASES DURAS */
     .phrase-box {
-      background: linear-gradient(135deg, rgba(244, 63, 94, 0.2) 0%, rgba(15, 23, 42, 0.9) 100%);
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%);
       border: 1px solid var(--danger);
       border-radius: 14px;
       padding: 14px 16px;
@@ -84,7 +84,7 @@
       display: none;
       align-items: flex-start;
       gap: 12px;
-      box-shadow: 0 4px 15px rgba(244, 63, 94, 0.2);
+      box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
       animation: fadeIn 0.3s ease-in-out;
     }
 
@@ -97,8 +97,8 @@
     }
 
     .phrase-text {
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-size: 0.92rem;
+      font-weight: 700;
       color: #fecdd3;
       line-height: 1.35;
     }
@@ -364,7 +364,7 @@
       
       <!-- TARJETA FRASES DURAS -->
       <div class="phrase-box" id="phraseBox">
-        <i data-lucide="alert-triangle"></i>
+        <i data-lucide="skull"></i>
         <div class="phrase-text" id="phraseText"></div>
       </div>
 
@@ -441,11 +441,11 @@
   </nav>
 
   <script>
-    // --- FRASES DURAS Y SARCÁSTICAS ---
+    // --- FRASES EXTREMAS Y SARCÁSTICAS ---
     const frasesDuras = [
+      "¿Un día libre? Claro, los campeones también se toman días... Ah, espera, tú no eres campeón.",
       "Eres un débil, nunca confié en ti. Jaja.",
       "Lo sabía, eres incapaz de tener compromiso.",
-      "¿Un día libre? Claro, los campeones también se toman días... Ah, espera, tú no eres campeón.",
       "¿Tan rápido te cansaste? Volviste a ser la misma excusa de siempre.",
       "El gimnasio esperándote y tú alimentando tu pereza.",
       "Mira el lado positivo: hoy no tuviste que esforzarte. Como siempre.",
@@ -462,7 +462,27 @@
       "¿Irás mañana o te vas a pedir otra semana de descanso mental?",
       "Se nota que tu compromiso dura lo que dura la motivación de enero.",
       "Otra 'X' roja. Tu calendario empieza a parecer un mapa de fracasos.",
-      "Nada nuevo por aquí, solo otra rendición ante el sofá."
+      "Nada nuevo por aquí, solo otra rendición ante el sofá.",
+      "¿Para qué compraste la ropa de entrenar? ¿Para dormir la siesta?",
+      "Vergüenza ajena me da ver cómo te das por vencido tan fácil.",
+      "El cuerpo que quieres no se consigue mirando el techo, flojo.",
+      "Te pesó más la flojera que una mancuerna de 5 libras.",
+      "Inconstante, mediocre y sin voluntad. Menudo combo armaste hoy.",
+      "Sigue buscando excusas, que en eso sí eres un atleta profesional.",
+      "Te rindes más rápido que un celular sin batería.",
+      "¿De verdad no te da pena mirar esa X roja ahí estampada?",
+      "Tus excusas no van a hipertrofiar solas, sigue inventando.",
+      "El sofá ganó otra batalla. La guerra contra la pereza la perdiste hace rato.",
+      "No te preocupes, la disciplina no es para cualquiera.",
+      "¿Mañana también te vas a inventar una tragedia para no ir?",
+      "Naciste para pedir perdón por no intentar las cosas.",
+      "Hoy descansaste del descanso de ayer. Menudo ritmo llevas.",
+      "Cero sorpresa: la constancia jamás ha sido tu fuerte.",
+      "Si tuvieras la misma fuerza en las piernas que en la boca para dar excusas, serías Olímpico.",
+      "Esa X roja es el reflejo de tu falta de carácter.",
+      "Sigue así y el único peso que vas a levantar es el de la culpa.",
+      "Fracasar requiere esfuerzo, pero tú ni para eso te levantaste.",
+      "¿Te aplaudo por rendirte o ya estás acostumbrado a hacerlo solo?"
     ];
 
     // --- LISTA BASE DE EJERCICIOS ---
@@ -484,13 +504,13 @@
     let activeYear = currentDate.getFullYear();
 
     let state = {
-      asistencia: JSON.parse(localStorage.getItem('fit_asistencia_v4')) || {},
-      ejercicios: JSON.parse(localStorage.getItem('fit_ejercicios_v4')) || defaultEjercicios
+      asistencia: JSON.parse(localStorage.getItem('fit_asistencia_v5')) || {},
+      ejercicios: JSON.parse(localStorage.getItem('fit_ejercicios_v5')) || defaultEjercicios
     };
 
     function saveState() {
-      localStorage.setItem('fit_asistencia_v4', JSON.stringify(state.asistencia));
-      localStorage.setItem('fit_ejercicios_v4', JSON.stringify(state.ejercicios));
+      localStorage.setItem('fit_asistencia_v5', JSON.stringify(state.asistencia));
+      localStorage.setItem('fit_ejercicios_v5', JSON.stringify(state.ejercicios));
     }
 
     // --- PESTAÑAS ---
