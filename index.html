@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>FitControl Simple</title>
+  <title>FitControl - Motivación Dura</title>
   
   <!-- Iconos Lucide -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -64,6 +64,39 @@
 
     .view { display: none; }
     .view.active { display: block; }
+
+    /* TARJETA DE FRASES DURAS */
+    .phrase-box {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid var(--danger);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      display: none;
+      align-items: flex-start;
+      gap: 12px;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .phrase-box.active { display: flex; }
+
+    .phrase-box i {
+      color: var(--danger);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .phrase-text {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fca5a5;
+      line-height: 1.3;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     /* CALENDARIO DE ASISTENCIA */
     .calendar-header {
@@ -150,7 +183,7 @@
     .stat-value { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
     .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
 
-    /* REGISTRO DE PESOS POR EJERCICIO */
+    /* REGISTRO DE PESOS DE EJERCICIOS */
     .section-title {
       font-size: 1.05rem;
       font-weight: 700;
@@ -265,6 +298,13 @@
   <main>
     <!-- VISTA 1: CALENDARIO -->
     <section id="view-calendar" class="view active">
+      
+      <!-- CARTA DE FRASES DURAS -->
+      <div class="phrase-box" id="phraseBox">
+        <i data-lucide="alert-triangle"></i>
+        <div class="phrase-text" id="phraseText"></div>
+      </div>
+
       <div class="calendar-header">
         <button class="month-nav" onclick="cambiarMes(-1)"><i data-lucide="chevron-left"></i></button>
         <div class="calendar-title" id="monthTitle">Cargando...</div>
@@ -316,6 +356,30 @@
   </nav>
 
   <script>
+    // --- BATERÍA DE FRASES DURAS Y SARCÁSTICAS ---
+    const frasesDuras = [
+      "Eres un débil, nunca confié en ti. Jaja.",
+      "Lo sabía, eres incapaz de tener compromiso.",
+      "¿Un día libre? Claro, los campeones también se toman días... Ah, espera, tú no eres campeón.",
+      "¿Tan rápido te cansaste? Volviste a ser la misma excusa de siempre.",
+      "El gimnasio esperándote y tú alimentando tu pereza.",
+      "Mira el lado positivo: hoy no tuviste que esforzarte. Como siempre.",
+      "A este paso el único músculo que vas a desarrollar es el de poner excusas.",
+      "¿Mañana sí vas o también vas a inventar que te dolía una uña?",
+      "Tu disciplina duró menos que un suspiro. Qué sorpresa.",
+      "La barra no pesa nada, pero tu falta de voluntad pesa toneladas.",
+      "Tranquilo, la mediocridad no requiere ningún esfuerzo.",
+      "Sigue así y en un año estarás exactamente en el mismo lugar.",
+      "¿Te dio flojera? No te preocupes, tus metas tampoco tenían prisa.",
+      "Qué fácil es rendirse, ¿verdad? Se te da de maravilla.",
+      "Hoy ganó tu versión floja. Para no variar.",
+      "Si las excusas quemaran calorías, ya estarías en forma.",
+      "¿Irás mañana o te vas a pedir otra semana de descanso mental?",
+      "Se nota que tu compromiso dura lo que dura la motivación de enero.",
+      "Otra 'X' roja. Tu calendario empieza a parecer un mapa de fracasos.",
+      "Nada nuevo por aquí, solo otra rendición ante el sofá."
+    ];
+
     // --- LISTA BASE DE EJERCICIOS ---
     const defaultEjercicios = [
       { id: 'ex_1', nombre: 'Press de Banca Plano', grupo: 'Pecho', peso: 135, reps: 10 },
@@ -335,13 +399,13 @@
     let activeYear = currentDate.getFullYear();
 
     let state = {
-      asistencia: JSON.parse(localStorage.getItem('fit_asistencia_v2')) || {},
-      ejercicios: JSON.parse(localStorage.getItem('fit_ejercicios_v2')) || defaultEjercicios
+      asistencia: JSON.parse(localStorage.getItem('fit_asistencia_v3')) || {},
+      ejercicios: JSON.parse(localStorage.getItem('fit_ejercicios_v3')) || defaultEjercicios
     };
 
     function saveState() {
-      localStorage.setItem('fit_asistencia_v2', JSON.stringify(state.asistencia));
-      localStorage.setItem('fit_ejercicios_v2', JSON.stringify(state.ejercicios));
+      localStorage.setItem('fit_asistencia_v3', JSON.stringify(state.asistencia));
+      localStorage.setItem('fit_ejercicios_v3', JSON.stringify(state.ejercicios));
     }
 
     // --- PESTAÑAS ---
@@ -412,15 +476,25 @@
       renderCalendar();
     }
 
-    // CICLO 3 TOQUES: 1: Pleca verde ✔️ | 2: X roja ❌ | 3: Limpio
+    // CICLO 3 TOQUES: 1: Pleca verde ✔️ | 2: X roja ❌ (Dispara frase dura) | 3: Limpio
     function toggleDayAttendance(dateKey) {
       const current = state.asistencia[dateKey];
+      const phraseBox = document.getElementById('phraseBox');
+      const phraseText = document.getElementById('phraseText');
+
       if (!current) {
         state.asistencia[dateKey] = 'trained'; // 1º Toque: Verde con Pleca
+        phraseBox.classList.remove('active');
       } else if (current === 'trained') {
         state.asistencia[dateKey] = 'rest';    // 2º Toque: Rojo con X
+        
+        // Muestra frase aleatoria picante
+        const fraseRandom = frasesDuras[Math.floor(Math.random() * frasesDuras.length)];
+        phraseText.innerText = fraseRandom;
+        phraseBox.classList.add('active');
       } else {
         delete state.asistencia[dateKey];      // 3º Toque: Limpio
+        phraseBox.classList.remove('active');
       }
 
       saveState();
